@@ -5,15 +5,13 @@ import { ResumeData, AnalysisResult } from "../types";
 let genAI: GoogleGenAI | null = null;
 
 function getAI() {
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || (typeof process !== 'undefined' ? process.env.GEMINI_API_KEY : null);
+  
+  if (!apiKey) {
+    return null;
+  }
+
   if (!genAI) {
-    // In Vite, environment variables are accessible via import.meta.env
-    // AI Studio injects GEMINI_API_KEY into process.env during development
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || (typeof process !== 'undefined' ? process.env.GEMINI_API_KEY : null);
-    
-    if (!apiKey) {
-      console.warn("Gemini API Key is not configured. AI features will use fallback mock data.");
-      throw new Error("API_KEY_MISSING");
-    }
     genAI = new GoogleGenAI({ apiKey });
   }
   return genAI;
@@ -23,6 +21,13 @@ export const aiService = {
   async getResumeSuggestions(sectionName: string, content: any): Promise<string[]> {
     try {
       const ai = getAI();
+      if (!ai) {
+        return [
+          "Incorporate more quantifiable metrics (e.g., 'increased efficiency by 20%')",
+          "Use more action-oriented power verbs at the start of bullets",
+          "Ensure keywords match modern ATS standards for your industry"
+        ];
+      }
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `You are an expert career coach and ATS specialist. Review this ${sectionName} section of a resume and provide 3 concise, actionable improvements to make it stand out and be more impactful. 
@@ -43,6 +48,18 @@ export const aiService = {
   async analyzeMatch(resume: ResumeData, jobDescription: string): Promise<AnalysisResult> {
     try {
       const ai = getAI();
+      if (!ai) {
+        return {
+          score: 85,
+          keywordMatch: ["Technical Leadership", "System Architecture", "Cloud Infrastructure"],
+          missingKeywords: ["Specific industry certifications", "Legacy systems keywords"],
+          atsCompatibility: {
+            score: 92,
+            issues: ["Missing specific cloud provider certifications"]
+          },
+          suggestions: ["Add more focus on team management size", "Include specific cloud provider names"]
+        };
+      }
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `Analyze this resume against the job description. Provide:

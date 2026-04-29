@@ -22,8 +22,22 @@ export default function CoverLetterGenerator() {
     setIsGenerating(true);
     try {
         const apiKey = import.meta.env.VITE_GEMINI_API_KEY || (typeof process !== 'undefined' ? process.env?.GEMINI_API_KEY : null);
+        
         if (!apiKey) {
-          throw new Error("Gemini API Key is not configured. Please set VITE_GEMINI_API_KEY in your environment.");
+          setTimeout(() => {
+            setContent(`[DEMO MODE: NO API KEY CONFIGURED]
+
+Dear Hiring Manager,
+
+I am writing to express my strong interest in the target role. With my background in technology and leadership, I am confident that I can contribute significantly to your team.
+
+(Note: To generate a custom letter using AI, please configure VITE_GEMINI_API_KEY in your deployment environment variables.)
+
+Sincerely,
+${user.displayName || 'Candidate'}`);
+            setIsGenerating(false);
+          }, 1500);
+          return;
         }
         const ai = new GoogleGenAI({ apiKey });
         

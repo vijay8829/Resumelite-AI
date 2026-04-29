@@ -25,9 +25,24 @@ export default function CareerCoach() {
 
     try {
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY || (typeof process !== 'undefined' ? process.env?.GEMINI_API_KEY : null);
+      
       if (!apiKey) {
-        throw new Error("Gemini API Key is not configured. Please set VITE_GEMINI_API_KEY in your environment.");
+        // Fallback demo response
+        setTimeout(() => {
+          const demoResponse = {
+            text: "Hello! I'm in offline demo mode because no AI API key is configured. To enable full AI coaching, please set VITE_GEMINI_API_KEY in your environment. \n\nDirect advice: For a technical leadership role, focus your resume on architectural decisions and team mentoring impacts."
+          };
+          setMessages(prev => [...prev, {
+            id: Date.now().toString(),
+            role: 'assistant',
+            content: demoResponse.text,
+            timestamp: new Date()
+          }]);
+          setIsTyping(false);
+        }, 1000);
+        return;
       }
+      
       const ai = new GoogleGenAI({ apiKey });
       
       const response = await ai.models.generateContent({

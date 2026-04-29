@@ -15,6 +15,7 @@ const FirebaseContext = createContext<FirebaseContextType | undefined>(undefined
 export function FirebaseProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -52,9 +53,9 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
         console.warn("Authentication window closed by user.");
       } else if (error.code === 'auth/unauthorized-domain') {
         const domain = window.location.hostname;
-        console.error(`Unauthorized Domain: ${domain}. Please add this domain to the "Authorized domains" list in Firebase Console > Authentication > Settings.`);
-        // Note: Using a standard alert for developer configuration errors as suggested by the user to fix bugs.
-        // In a production app, this would be a custom UI notification.
+        const msg = `Unauthorized Domain: ${domain}. Please add this domain to the "Authorized domains" list in Firebase Console > Authentication > Settings.`;
+        console.error(msg);
+        setAuthError(msg);
       } else {
         console.error("Login failed:", error.message);
       }
@@ -71,6 +72,17 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <FirebaseContext.Provider value={{ user, loading, login, logout }}>
+      {authError && (
+        <div className="fixed top-0 left-0 right-0 z-[1000] bg-red-600 text-white p-4 text-center font-bold text-sm shadow-xl flex items-center justify-center gap-4">
+          <span>⚠️ {authError}</span>
+          <button 
+            onClick={() => setAuthError(null)}
+            className="px-3 py-1 rounded bg-white/20 hover:bg-white/30 transition-colors"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
       {children}
     </FirebaseContext.Provider>
   );
