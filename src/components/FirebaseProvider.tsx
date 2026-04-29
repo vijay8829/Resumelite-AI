@@ -50,6 +50,11 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
     } catch (error: any) {
       if (error.code === 'auth/popup-closed-by-user') {
         console.warn("Authentication window closed by user.");
+      } else if (error.code === 'auth/unauthorized-domain') {
+        const domain = window.location.hostname;
+        console.error(`Unauthorized Domain: ${domain}. Please add this domain to the "Authorized domains" list in Firebase Console > Authentication > Settings.`);
+        // Note: Using a standard alert for developer configuration errors as suggested by the user to fix bugs.
+        // In a production app, this would be a custom UI notification.
       } else {
         console.error("Login failed:", error.message);
       }

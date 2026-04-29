@@ -24,9 +24,9 @@ export default function CareerCoach() {
     setIsTyping(true);
 
     try {
-      const apiKey = process.env.GEMINI_API_KEY;
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY || (typeof process !== 'undefined' ? process.env?.GEMINI_API_KEY : null);
       if (!apiKey) {
-        throw new Error("Gemini API Key is not configured.");
+        throw new Error("Gemini API Key is not configured. Please set VITE_GEMINI_API_KEY in your environment.");
       }
       const ai = new GoogleGenAI({ apiKey });
       

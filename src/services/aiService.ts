@@ -6,9 +6,13 @@ let genAI: GoogleGenAI | null = null;
 
 function getAI() {
   if (!genAI) {
-    const apiKey = process.env.GEMINI_API_KEY;
+    // In Vite, environment variables are accessible via import.meta.env
+    // AI Studio injects GEMINI_API_KEY into process.env during development
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || (typeof process !== 'undefined' ? process.env.GEMINI_API_KEY : null);
+    
     if (!apiKey) {
-      throw new Error("Gemini API Key is not configured. Please set GEMINI_API_KEY in your environment.");
+      console.warn("Gemini API Key is not configured. AI features will use fallback mock data.");
+      throw new Error("API_KEY_MISSING");
     }
     genAI = new GoogleGenAI({ apiKey });
   }

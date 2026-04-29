@@ -8,12 +8,18 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-// Image paths from generator
+// Import images correctly for Vite
+import platformImg from '../assets/images/platform_3d_engine_1776928113093.png';
+import solutionsImg from '../assets/images/solutions_3d_network_1776928133350.png';
+import architectureImg from '../assets/images/architecture_3d_structure_1776928151432.png';
+import enterpriseImg from '../assets/images/enterprise_3d_globe_1776928172930.png';
+
+// Image paths from imports
 const IMAGES = {
-  platform: '/src/assets/images/platform_3d_engine_1776928113093.png',
-  solutions: '/src/assets/images/solutions_3d_network_1776928133350.png',
-  architecture: '/src/assets/images/architecture_3d_structure_1776928151432.png',
-  enterprise: '/src/assets/images/enterprise_3d_globe_1776928172930.png',
+  platform: platformImg,
+  solutions: solutionsImg,
+  architecture: architectureImg,
+  enterprise: enterpriseImg,
 };
 
 interface LandingProps {
@@ -48,7 +54,7 @@ export default function Landing({ onStart }: LandingProps) {
       image: IMAGES.platform,
       icon: Cpu,
       color: 'blue',
-      video: 'https://cdn.pixabay.com/video/2023/10/24/186350-877717468_large.mp4'
+      video: 'https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-blue-lines-41220-large.mp4'
     },
     { 
       id: 'solutions', 
@@ -57,7 +63,7 @@ export default function Landing({ onStart }: LandingProps) {
       image: IMAGES.solutions,
       icon: Network,
       color: 'indigo',
-      video: 'https://cdn.pixabay.com/video/2022/05/25/118182-714092403_large.mp4'
+      video: 'https://assets.mixkit.co/videos/preview/mixkit-circuit-board-of-a-computer-4482-large.mp4'
     },
     { 
       id: 'architecture', 
@@ -66,7 +72,7 @@ export default function Landing({ onStart }: LandingProps) {
       image: IMAGES.architecture,
       icon: Database,
       color: 'cyan',
-      video: 'https://cdn.pixabay.com/video/2016/09/06/4962-181512497_large.mp4'
+      video: 'https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-world-map-with-data-points-4467-large.mp4'
     },
     { 
       id: 'enterprise', 
@@ -75,7 +81,7 @@ export default function Landing({ onStart }: LandingProps) {
       image: IMAGES.enterprise,
       icon: Globe,
       color: 'emerald',
-      video: 'https://cdn.pixabay.com/video/2021/04/12/70860-537446559_large.mp4'
+      video: 'https://assets.mixkit.co/videos/preview/mixkit-stars-in-the-night-sky-shining-brightly-11005-large.mp4'
     }
   ];
 
@@ -215,7 +221,7 @@ export default function Landing({ onStart }: LandingProps) {
             playsInline
             className="w-full h-full object-cover grayscale contrast-150"
           >
-            <source src="https://cdn.pixabay.com/video/2023/10/24/186350-877717468_large.mp4" type="video/mp4" />
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-blue-lines-41220-large.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-transparent to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#020202]/80 via-transparent to-[#020202]/80" />
