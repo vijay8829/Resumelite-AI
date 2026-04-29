@@ -1,12 +1,24 @@
 import { GoogleGenAI } from "@google/genai";
 import { ResumeData, AnalysisResult } from "../types";
 
-// Note: In production, process.env.GEMINI_API_KEY is injected by the platform.
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// Helper to get Gemini AI instance securely
+let genAI: GoogleGenAI | null = null;
+
+function getAI() {
+  if (!genAI) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error("Gemini API Key is not configured. Please set GEMINI_API_KEY in your environment.");
+    }
+    genAI = new GoogleGenAI({ apiKey });
+  }
+  return genAI;
+}
 
 export const aiService = {
   async getResumeSuggestions(sectionName: string, content: any): Promise<string[]> {
     try {
+      const ai = getAI();
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `You are an expert career coach and ATS specialist. Review this ${sectionName} section of a resume and provide 3 concise, actionable improvements to make it stand out and be more impactful. 
@@ -26,6 +38,7 @@ export const aiService = {
 
   async analyzeMatch(resume: ResumeData, jobDescription: string): Promise<AnalysisResult> {
     try {
+      const ai = getAI();
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `Analyze this resume against the job description. Provide:

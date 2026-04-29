@@ -21,7 +21,11 @@ export default function CoverLetterGenerator() {
     if (!jd || !user) return;
     setIsGenerating(true);
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+          throw new Error("Gemini API Key is not configured.");
+        }
+        const ai = new GoogleGenAI({ apiKey });
         
         // Fetch latest resume
         const q = query(
