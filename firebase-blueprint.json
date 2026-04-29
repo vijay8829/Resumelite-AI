@@ -1,0 +1,72 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Resume": {
+      "title": "Resume",
+      "description": "Resume data and professional details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "updatedAt": { "type": "integer" },
+        "personalInfo": {
+          "type": "object",
+          "properties": {
+            "fullName": { "type": "string" },
+            "email": { "type": "string" },
+            "phone": { "type": "string" },
+            "location": { "type": "string" },
+            "linkedin": { "type": "string" },
+            "summary": { "type": "string" }
+          }
+        },
+        "experience": { "type": "array" },
+        "education": { "type": "array" },
+        "skills": { "type": "array" },
+        "projects": { "type": "array" }
+      },
+      "required": ["id", "userId", "title"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Extended user career metadata and neural configuration",
+      "type": "object",
+      "properties": {
+        "phone": { "type": "string" },
+        "targetRole": { "type": "string" },
+        "industries": { "type": "string" },
+        "location": { "type": "string" },
+        "marketTier": { "type": "string" },
+        "displayName": { "type": "string" },
+        "updatedAt": { "type": "object" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Stores user profile data"
+    },
+    "/users/{userId}/resumes/{resumeId}": {
+      "schema": "Resume",
+      "description": "Stores individual resume versions for a user"
+    },
+    "/userProfiles/{userId}": {
+      "schema": "UserProfile",
+      "description": "Stores extended career metadata and neural alignment data"
+    }
+  }
+}
